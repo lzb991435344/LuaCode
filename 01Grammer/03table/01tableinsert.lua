@@ -7,6 +7,12 @@ local t = {
 	[3] = 15
  }
 
+--table.remove返回remove掉的值
+local s = table.insert(t, 99)
+print(s)  --nil
+local r = table.remove(t)
+print(r) --99
+
 
 --在指定位置插入
 print("--------1-------")
