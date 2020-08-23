@@ -11,7 +11,6 @@
 --	print(i)
 --end
 
-
 --global
 i = 1
 local i = 0

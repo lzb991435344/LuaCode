@@ -31,12 +31,6 @@ while true do
 end
 
 
-function func()
-	return function func()
-		return 2
-	end
-end
-
 --[[
 function: 0x7fe2314066f0
 1
