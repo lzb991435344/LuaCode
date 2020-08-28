@@ -15,6 +15,16 @@ for k,v in pairs(g) do
 		for p,s in pairs(v) do
 			print(p, s)
 		end
-
 	end
 end
+
+
+--for k,v in pairs(g.szCoef) do
+ --  print(k,v)
+--end
+
+--for k,v in pairs(g) do
+--  for p,s in pairs(v.szCoef) do
+--      print(s)
+--   end
+--end
