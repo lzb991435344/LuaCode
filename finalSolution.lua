@@ -132,6 +132,7 @@ function ttostring(t)
 		for k,v in pairs(tbl) do
 			local key = type(k)=="number" and "["..k.."]" or k
 			local tp = type(v)
+<<<<<<< HEAD
 			if tp == "table" then
 				table.insert(tmp, key.."="..ser_table(v))
 			else
@@ -140,6 +141,16 @@ function ttostring(t)
 				elseif tp=="boolean" then
 					table.insert(tmp, key.."="..tostring(v))
                 elseif tp == "function" then
+=======
+			if tp=="table" then
+				table.insert(tmp, key.."="..ser_table(v))
+			else
+				if tp=="string" then
+					table.insert(tmp, key.."="..string.format("%q",v))
+				elseif tp=="boolean" then
+					table.insert(tmp, key.."="..tostring(v))
+                elseif tp=="function" then
+>>>>>>> slave01
                     --函数不打印
 				else
 					table.insert(tmp, key.."="..v)
