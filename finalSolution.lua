@@ -25,16 +25,17 @@ local _users = {
 ---2222222
 
 local _users = {
-  {money=3643,confInfo={topLimit=10000,baseScore=20}},
-  {money=3435,confInfo={topLimit=10000,baseScore=20}},
-  {money=71000,confInfo={topLimit=10000,baseScore=20}}
+	--198500
+  {money=28800,confInfo={topLimit=50000,baseScore=100}},
+  {money=52700,confInfo={topLimit=50000,baseScore=100}},
+  {money=33700,confInfo={topLimit=50000,baseScore=100}}
 }
     
 
 local g = {
   dzSid = 1,
   --szCoef = {11520,5760,5760}
-  szCoef = {540, 180, 360}
+  szCoef = {92160, 46080, 46080}
 }
 
 
@@ -132,16 +133,6 @@ function ttostring(t)
 		for k,v in pairs(tbl) do
 			local key = type(k)=="number" and "["..k.."]" or k
 			local tp = type(v)
-<<<<<<< HEAD
-			if tp == "table" then
-				table.insert(tmp, key.."="..ser_table(v))
-			else
-				if tp == "string" then
-					table.insert(tmp, key.."="..string.format("%q",v))
-				elseif tp=="boolean" then
-					table.insert(tmp, key.."="..tostring(v))
-                elseif tp == "function" then
-=======
 			if tp=="table" then
 				table.insert(tmp, key.."="..ser_table(v))
 			else
@@ -150,7 +141,6 @@ function ttostring(t)
 				elseif tp=="boolean" then
 					table.insert(tmp, key.."="..tostring(v))
                 elseif tp=="function" then
->>>>>>> slave01
                     --函数不打印
 				else
 					table.insert(tmp, key.."="..v)
@@ -248,15 +238,23 @@ function room:settlement_compute(winSid)
 
 		--地主本身最大的豆的数量
 		local dzMaxCanWin = realWinGameBeans[winSid]
+
 		--local u = self._users[winSid]
 
 		--赢的那个人实际账户中能抵扣的数量
 		local dzCanWin = realWinGameBeans[winSid]
-	
+		
+
  		--地主赢两倍的封顶
 		local doubleTopLimitValue = 2 *  topLimitValue
 
+		if doubleTopLimitValue ~= 0 and dzCanWin >= doubleTopLimitValue then 
+			realWinGameBeans[g.dzSid] = doubleTopLimitValue
+		end	
+
+		print("111", ttostring(realWinGameBeans))
 		--new
+		--[[
 		if doubleTopLimitValue ~= 0  then 
 			if  dzCanWin < nongMinRealGB then 
 				--2倍封顶值 < 能赢的豆子 < 农民所有的总和
@@ -272,16 +270,18 @@ function room:settlement_compute(winSid)
 			else
 
 				--2倍封顶值 > 农民所有的总和    地主能赢的值 > 农民所有的总和
-			   	if doubleTopLimitValue > nongMinRealGB then
-			   		realWinGameBeans[winSid] = nongMinRealGB
-					
+			   	if doubleTopLimitValue >= nongMinRealGB then
+			   		--realWinGameBeans[winSid] = nongMinRealGB
+			   		--print("66666")
+					realWinGameBeans[winSid] = doubleTopLimitValue
 			   	else --2倍封顶值 < 农民所有的总和
-
-			   		realWinGameBeans[winSid] = doubleTopLimitValue
+			   		realWinGameBeans[winSid] = nongMinRealGB
+			   		--
 			   	end	
 			end
 	    end
-
+			]]
+        print("222", ttostring(realWinGameBeans))
 	    --print(ttostring(realWinGameBeans))
 		
 		pChangeGameBeans[g.dzSid] = 0
@@ -290,36 +290,52 @@ function room:settlement_compute(winSid)
 			
 			if sid ~= g.dzSid then
 				
+				--print("dz win ", ttostring(realWinGameBeans))
 				local dzRealWin = math.floor(realWinGameBeans[g.dzSid] * (g.szCoef[sid] / totalSzCoef))
 
-				if dzRealWin >= realWinGameBeans[sid] then 
+				if dzRealWin >= realWinGameBeans[sid] then
+				    --print("8888") 
 					pChangeGameBeans[sid] = realWinGameBeans[sid]
 				else
 					pChangeGameBeans[sid] = dzRealWin	
 				end	
-			pChangeGameBeans[g.dzSid] = pChangeGameBeans[g.dzSid] + pChangeGameBeans[sid]	
+				pChangeGameBeans[g.dzSid] = pChangeGameBeans[g.dzSid] + pChangeGameBeans[sid]	
 			end
 			
 			--if pChangeGameBeans[sid] >= realWinGameBeans[sid] then
 			if pChangeGameBeans[sid] >= userCoinMoney[sid]	then 
 				sidIsBankrupt[sid] = true
+			end
+
+			--new 
+			if pChangeGameBeans[sid] == topLimitValue then 
+				sidIsTopLimit[sid] = true
 			end	
 		end
 		if pChangeGameBeans[g.dzSid] >= realWinGameBeans[g.dzSid]  then 
 			totalIsTopLimit = true
 		end	
 
+		if pChangeGameBeans[g.dzSid] == userCoinMoney[g.dzSid] then 
+			sidIsTopLimit[g.dzSid] = true
+		end	
+
 		szWinCoinFull[g.dzSid] = realWinGameBeans[g.dzSid] - pChangeGameBeans[g.dzSid]
 	else
 
+		print("111", ttostring(realWinGameBeans))
 		--农民赢
+		--[[
 		if topLimitValue ~= 0 and nongMinRealGB > topLimitValue and 
 		   realWinGameBeans[g.dzSid] > topLimitValue then
 		    --农民在该场赢到了封顶
-			totalIsTopLimit = true
+			--totalIsTopLimit = true
 			nongMinRealGB = topLimitValue
 			realWinGameBeans[g.dzSid] = topLimitValue
 		end
+		]]
+
+		print("222", ttostring(realWinGameBeans))
 
 		--print(ttostring(realWinGameBeans))
 		pChangeGameBeans[g.dzSid] = 0
@@ -328,9 +344,17 @@ function room:settlement_compute(winSid)
 				--local dzRealLose = math.floor(realWinGameBeans[g.dzSid] * (g.szCoef[sid])/ totalSzCoef)
 				--
 				local dzRealLose = math.floor(realWinGameBeans[g.dzSid] * (g.szCoef[sid])/ totalSzCoef)
+				--local dzRealLose = math.floor(nongMinRealGB * (g.szCoef[sid])/ totalSzCoef)
 				--print("1111",dzRealLose)
 				if dzRealLose >= realWinGameBeans[sid] then 
+
 					pChangeGameBeans[sid] = realWinGameBeans[sid]
+					
+					if pChangeGameBeans[sid] >= topLimitValue then 
+
+						pChangeGameBeans[sid] = topLimitValue
+					end	
+
 				else
 					pChangeGameBeans[sid] = dzRealLose	
 				end
@@ -338,6 +362,7 @@ function room:settlement_compute(winSid)
 				--print("5555",pChangeGameBeans[sid],realWinGameBeans[sid])
 
 				--if pChangeGameBeans[sid] >= realWinGameBeans[sid] then 
+				--print("userCoinMoney[sid]", userCoinMoney[sid])
 				if pChangeGameBeans[sid] >= userCoinMoney[sid] then 	
 					--print(pChangeGameBeans[sid],realWinGameBeans[sid])
 					sidIsTopLimit[sid] = true
@@ -360,13 +385,17 @@ function room:settlement_compute(winSid)
 		--if pChangeGameBeans[g.dzSid] >= realWinGameBeans[g.dzSid] then 
 		if pChangeGameBeans[g.dzSid] >= userCoinMoney[g.dzSid] then 	
 			sidIsBankrupt[g.dzSid] = true
+		end	
+
+		if pChangeGameBeans[g.dzSid] == topLimitValue then
+			totalIsTopLimit = true
 		end		
 	end
 	return pChangeGameBeans,totalIsTopLimit,sidIsTopLimit,sidIsBankrupt,szFullWin,szWinCoinFull
 end
 
 
-local pChangeGameBeans,totalIsTopLimit,sidIsTopLimit,sidIsBankrupt,szFullWin,szWinCoinFull = room:settlement_compute(2)
+local pChangeGameBeans,totalIsTopLimit,sidIsTopLimit,sidIsBankrupt,szFullWin,szWinCoinFull = room:settlement_compute(1)
 
 
 
@@ -384,9 +413,4 @@ print("sidIsBankrupt", ttostring(sidIsBankrupt))
 print("szFullWin", ttostring(szFullWin))
 
 print("szWinCoinFull", ttostring(szWinCoinFull))
-
-
-
-
-
 
