@@ -76,12 +76,84 @@ function compareVersion(ver1, ver2)
 	return res
 end
 
-local ver1 = "5.1.3"
-local ver2 = "5.1.4"
+function verTest(ver1, ver2)
 
-local res = compareVersion(ver1, ver2) 
+	local flag = false 
+	
+	--第一个位
+	local firstPos1 = string.find(ver1, "%.")
+	local firstPos2 = string.find(ver2, "%.")
 
-print(res)
+
+	local firstVersion1 = tonumber(string.sub(ver1, 1, firstPos1 - 1))
+	local firstVersion2 = tonumber(string.sub(ver2, 1, firstPos1 - 1))
+	 print(firstVersion1)
+
+
+	if firstVersion1 > firstVersion2 then 
+	--第二个位
+	local secondStr1 = string.sub(ver1, firstPos1 + 1, string.len(ver1))
+	local secondStr2 = string.sub(ver2, firstPos2 + 1, string.len(ver2))
+
+
+	--print(secondStr1)
+	local secondPos1 = string.find(secondStr1, "%.")
+	local secondPos2 = string.find(secondStr2, "%.")
+
+	local secondVersion1 = tonumber(string.sub(secondStr1, 1, secondPos1 - 1))
+    local secondVersion2 = tonumber(string.sub(secondStr1, 1, secondPos1 - 1))
+	 print(secondVersion1)
+
+
+    --第三个位
+    local thirdStr1 = string.sub(secondStr1, secondPos1 + 1, string.len(secondStr1))
+    local thirdStr2 = string.sub(secondStr2, secondPos2 + 1, string.len(secondStr2))
+    --print(thirdStr1)
+
+
+
+    local thirdPos1 = string.find(thirdStr1, "%.")
+    local thirdPos2 = string.find(thirdStr2, "%.")
+    --print(thirdPos1)
+
+    local thirdVersion1 = tonumber(string.sub(thirdStr1, 1, thirdPos1 - 1))
+    local thirdVersion2 = tonumber(string.sub(thirdStr2, 1, thirdPos2 - 1))
+    print(thirdVersion1)
+
+
+    --第四位
+    local fourVersion1 = tonumber(string.sub(thirdStr1, thirdPos1 + 1, string.len(thirdStr1)))
+    local fourVersion2 = tonumber(string.sub(thirdStr2, thirdPos2 + 1, string.len(thirdStr2)))
+    
+
+    print(fourVersion1)    
+end
+
+local ver1 = "5.1.9.4"
+local ver2 = "5.1.3.5"
+
+--local res = compareVersion(ver1, ver2) 
+
+--print(res)
+verTest(ver1, ver2)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
