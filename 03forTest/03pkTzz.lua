@@ -29,4 +29,4 @@ function  test()
 
 end 
 
-test()
+test()  --nil  在if语句之内定义的变量不能在if外使用
