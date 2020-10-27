@@ -1,5 +1,5 @@
 
-
+require "socket.core"
 
 local t = {
 	[1] = 10,
