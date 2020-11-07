@@ -3,22 +3,8 @@
 
 
 local room = {
+}
 
-}
---[[
-local _users = {
-		sidIsTopLimit = {false, false, false},
-		sidIsBankrupt = {false, false, false},
-		szFullWin = {false, false, false},
-		szWinCoinFull = {false, false, false},
-		szWinGameBeans ={4000, 2000, 3000},
-		confInfo = {
-			topLimit = 2000,
-			baseScore = 1
-		},
-		
-}
-]]
 
 
 
@@ -31,8 +17,12 @@ local _users = {
 
 local g = {
   dzSid = 1,
+<<<<<<< HEAD
+  szCoef = {180,90,90}
+=======
   --szCoef = {11520,5760,5760}
   szCoef = {1000,2000,1500}
+>>>>>>> 529d57e0bfeb3b6f3b12ea0de0faefd8523aad44
 }
 
 
@@ -87,6 +77,13 @@ function room:settlement_compute(winSid)
 	local szWinCoinFull = {}      --赢不够的时候,除了已经给的那些，还需要补偿多少
 	local topLimitValue = 0
 	
+<<<<<<< HEAD
+	--初始化以上诸表
+	for sid, u in pairs(_users) do 
+ 		--print(ttostring(u))
+
+ 		--print(sid)
+=======
 	--if GAME.FOUR50 == self._gameType or GAME.FOUR51 == self._gameType or 
 	--   GAME.FOUR52 == self._gameType then
 	--   	peasantCount = 3
@@ -106,17 +103,19 @@ function room:settlement_compute(winSid)
 	--初始化以上诸表
 	for sid,u in pairs(_users) do 
  
+>>>>>>> 529d57e0bfeb3b6f3b12ea0de0faefd8523aad44
 		sidIsTopLimit[sid] = false
 		sidIsBankrupt[sid] = false
 		szFullWin[sid] = false
 		szWinCoinFull[sid] = 0
 
+<<<<<<< HEAD
+=======
 
+>>>>>>> 529d57e0bfeb3b6f3b12ea0de0faefd8523aad44
 		local cInfo = u.confInfo
 		topLimitValue =  cInfo.topLimit
 	
-
-		
 
 
 		--根据倍数算出实际的输赢
@@ -142,7 +141,12 @@ function room:settlement_compute(winSid)
     	end
 	end
 
-
+	local totalSzCoef = 0
+	for sid, u in pairs() do
+		if sid ~= g.dzSid then
+			totalSzCoef = totalSzCoef + g.szCoef[sid]
+		end	
+	end	
  
  	--self:log("szWinGameBeans="..tablex.tostring(szWinGameBeans).."realWinGameBeans="..tablex.tostring(realWinGameBeans))
 	if winSid == g.dzSid then
@@ -150,10 +154,12 @@ function room:settlement_compute(winSid)
 
 		--地主本身最大的豆的数量
 		local dzMaxCanWin = realWinGameBeans[winSid]
-		--local u = self._users[winSid]
-
 		--赢的那个人实际账户中能抵扣的数量
 		local dzCanWin = realWinGameBeans[winSid]
+<<<<<<< HEAD
+	
+ 
+=======
 		--print(dzCanWin)
 		--print(ttostring(realWinGameBeans))
 		--[[
@@ -180,10 +186,10 @@ function room:settlement_compute(winSid)
 	
 		]]--
 		
+>>>>>>> 529d57e0bfeb3b6f3b12ea0de0faefd8523aad44
  		--地主赢两倍的封顶
 		local doubleTopLimitValue = 2 *  topLimitValue
 
-		--new
 		if doubleTopLimitValue ~= 0  then 
 			if  dzCanWin < nongMinRealGB then 
 				--2倍封顶值 < 能赢的豆子 < 农民所有的总和
@@ -209,21 +215,17 @@ function room:settlement_compute(winSid)
 			end
 	   end
 
-		--新逻辑增加代码
-		--if topLimitValue ~= 0 and dzCanWin >= 2 * topLimitValue then 
-		--	totalIsTopLimit = true
-		--	realWinGameBeans[winSid] = 2 * topLimitValue	
-		--end
+	   --地主赢, 地主赢的 > 农民的总量
+		if realWinGameBeans[winSid] > nongMinRealGB then
+			local nonMinRealLost  = 0
 
-	
-
-
-		--向下取整数 floor地板   ceil 天花板
-		local averageWin = math.floor(realWinGameBeans[winSid]/peasantCount)
-		if realWinGameBeans[winSid] % peasantCount == 0 then
-			averageWin = averageWin + 1
-		end
-
+<<<<<<< HEAD
+			for sid, u in realWinGameBeans do
+				if sid ~= g.dzSid then
+					nonMinRealLost = math.floor(nonMinRealLost + realWinGameBeans[sid] * (g.szCoef[sid]/totalSzCoef))
+				end	
+			end
+=======
 		--print(ttostring(szWinGameBeans))
 		--print(ttostring(realWinGameBeans))
 		--print("111111",realWinGameBeans[winSid],nongMinRealGB)
@@ -259,48 +261,91 @@ function room:settlement_compute(winSid)
 					--找到minSid 
 					if minSid > 0 then
 						existUseSid[minSid] = false
+>>>>>>> 529d57e0bfeb3b6f3b12ea0de0faefd8523aad44
 
-						--最少游戏豆的玩家 > 输掉游戏豆的平均值
+			if nonMinRealLost >= realWinGameBeans[g.dzSid] then
+				pChangeGameBeans[g.dzSid] = realWinGameBeans[g.dzSid]
 
-						--new
-						if averageWin <   minLose then
-							--改变的游戏豆值为平均值
-							pChangeGameBeans[minSid] = averageWin
+				for sid, u in pairs(realWinGameBeans) do
+					if g.sid ~= dzSid then
+						local tmp = math.floor(realWinGameBeans[sid] * (g.szCoef[sid]/totalSzCoef))
+						if tmp >= realWinGameBeans[sid] then
+							pChangeGameBeans[sid] = realWinGameBeans[sid] 
 						else
-							--平均值较大，最少游戏豆的玩家破产
-
-							print("ooo1")
-							sidIsBankrupt[minSid] = true  --破产标志位
-							pChangeGameBeans[minSid] = minLose  --更新改变的游戏豆大小
-							useLose = useLose + minLose  
-
-
-							--除去最小的玩家后,剩下的再继续平分一下
-							if peasantCount - i > 1 then
-								local sDZWinGameBeans = realWinGameBeans[winSid] - useLose
-								averageWin = math.floor(sDZWinGameBeans / (peasantCount - i))
-							else 
-								averageWin = realWinGameBeans[winSid] - useLose
-							end
+							pChangeGameBeans[sid] = tmp
 						end
-					end
+					if pChangeGameBeans[sid] >= realWinGameBeans[sid] then
+						sidIsBankrupt[sid] = true		
+					end	
 				end
-			 
-		else
-			--print("1",realWinGameBeans[winSid],nongMinRealGB)
+<<<<<<< HEAD
 
+				szWinCoinFull[g.dzSid] = dzMaxCanWin - pChangeGameBeans[g.dzSid]
+				 
+			else
+				pChangeGameBeans[g.dzSid] = 0
+				for sid, u in pairs(realWinGameBeans) do
+					if sid ~= g.dzSid then 
+						pChangeGameBeans[sid] = math.floor(nonMinRealLost * (g.szCoef[sid]/totalSzCoef))
+					end	
+					pChangeGameBeans[g.dzSid] = pChangeGameBeans[g.dzSid] + pChangeGameBeans[sid]
+				end 
+
+			end	
+				 
+=======
+			 
+>>>>>>> 529d57e0bfeb3b6f3b12ea0de0faefd8523aad44
+		else
+
+<<<<<<< HEAD
+		local nonMinRealLose = 0
+		for sid, u in pairs(realWinGameBeans) do
+			if sid ~= g.dzSid then
+				nonMinRealLose = math.floor(nonMinRealLose + realWinGameBeans[sid] * (g.szCoef[sid]/totalSzCoef))
+			end	
+		end
+
+		if nonMinRealLose >= realWinGameBeans[g.dz] then
+			pChangeGameBeans[g.dzSid] = realWinGameBeans[g.dzSid]
+
+			for sid, u in pairs(realWinGameBeans) do
+				if sid ~= g.dzSid then 
+					local tmp  =  math.floor(realWinGameBeans[sid] * (g.szCoef[sid]/totalSzCoef))
+
+					if tmp >= realWinGameBeans[sid] then 
+						pChangeGameBeans[sid] = realWinGameBeans[sid]
+					else
+						pChangeGameBeans[sid] = tmp
+					end
+						
+					if  pChangeGameBeans[sid] >= realWinGameBeans[sid] then
+						sidIsBankrupt[sid] = true
+					end	
+				end	
+=======
 			--地主赢的游戏豆 > 实际上农民有的豆
 			pChangeGameBeans[winSid] = nongMinRealGB
 			for sid, v in pairs(realWinGameBeans) do
 				if sid ~= g.dzSid then
 					pChangeGameBeans[sid] = v
 				end
+>>>>>>> 529d57e0bfeb3b6f3b12ea0de0faefd8523aad44
 			end
+			if realWinGameBeans[g.dzSid] == pChangeGameBeans[g.dzSid] then
+				sidIsTopLimit[g.dzSid] = true
+			end	
 
-			--需要补偿的值
-			--地主的实际值减去农民总共的值
-			szWinCoinFull[winSid] = dzMaxCanWin - nongMinRealGB
-		end
+		else
+			pChangeGameBeans[g.dzSid] = 0
+			for sid, u in pairs(realWinGameBeans) do
+				if sid ~= g.dzSid then 
+					pChangeGameBeans[sid] = math.floor(nonMinRealLose * (g.szCoef[sid]/totalSzCoef)) 
+				end	
+				pChangeGameBeans[g.dzSid] = pChangeGameBeans[g.dzSid] + pChangeGameBeans[sid]
+			end
+		end	
+
 	else
 
 		--农民赢
@@ -314,6 +359,11 @@ function room:settlement_compute(winSid)
 
 		--农民实际的总和 > 地主所有的游戏豆的总和
 		if nongMinRealGB >= realWinGameBeans[g.dzSid] then
+<<<<<<< HEAD
+			local nonMinRealWin = 0
+			for sid, u in pairs(realWinGameBeans) do
+				nonMinRealWin = nonMinRealWin + math.floor(nonMinRealLose * (g.szCoef[sid]/totalSzCoef)) 
+=======
 			--地主不够输
 			--农民能赢的金币大于地主能输的金币,地主破产
 			print("1res is",nongMinRealGB..realWinGameBeans[g.dzSid])
@@ -322,19 +372,29 @@ function room:settlement_compute(winSid)
 				--破产标志位
 
 				sidIsBankrupt[g.dzSid] = true	
+>>>>>>> 529d57e0bfeb3b6f3b12ea0de0faefd8523aad44
 			end
 
+			if nonMinRealWin >= realWinGameBeans[g.dzSid] then
+				pChangeGameBeans[g.dzSid] = realWinGameBeans[g.dzSid]
 
-			pChangeGameBeans[g.dzSid] = realWinGameBeans[g.dzSid]
+				for sid, u in pairs(realWinGameBeans) do
+					if sid ~= g.dzSid then
+						local tmp = math.floor(realWinGameBeans[g.dzSid] * (g.szCoef[sid]/totalSzCoef))
+						if tmp >= realWinGameBeans[sid] then
+							pChangeGameBeans[sid] = realWinGameBeans[sid]
+						else 
+							pChangeGameBeans[sid] = tmp
+						end
 
-			--平均分配
-			local averageWin = math.floor(realWinGameBeans[g.dzSid] / peasantCount)
-
-			--向上取整，能平均
-			if realWinGameBeans[g.dzSid] % peasantCount == 0 then
-				averageWin = averageWin + 1
-			end
-
+<<<<<<< HEAD
+						if pChangeGameBeans[sid] >= realWinGameBeans[sid] then
+							sidIsTopLimit[sid] = true
+						end	
+					end	
+				end
+				
+=======
 			--无法平均分配，即有余数
             local existUseSid = {}
 			local useLose = 0
@@ -367,14 +427,18 @@ function room:settlement_compute(winSid)
 						szFullWin[minSid] = true
 						--农民个人封顶
 						sidIsTopLimit[minSid] = true
+>>>>>>> 529d57e0bfeb3b6f3b12ea0de0faefd8523aad44
 
-						--改变的数量是实际上有的豆子数
-						pChangeGameBeans[minSid] = minLose
-						useLose = useLose + minLose
-						--除去最小的玩家后,剩下的再继续平分一下
+			else
 
-						if peasantCount - i > 1 then --当斗地主人数大于3人的时候
+			end	
 
+<<<<<<< HEAD
+		else
+			
+		end
+	end
+=======
 							local sDZWinGameBeans = realWinGameBeans[g.dzSid] - useLose
 							
 							averageWin = math.floor(sDZWinGameBeans/(peasantCount - i))
@@ -429,19 +493,12 @@ function room:settlement_compute(winSid)
 
 	--print(ttostring(szWinGameBeans))
 	--print(ttostring(realWinGameBeans))
+>>>>>>> 529d57e0bfeb3b6f3b12ea0de0faefd8523aad44
 	return pChangeGameBeans,totalIsTopLimit,sidIsTopLimit,sidIsBankrupt,szFullWin,szWinCoinFull
 end
 
 
 local pChangeGameBeans,totalIsTopLimit,sidIsTopLimit,sidIsBankrupt,szFullWin,szWinCoinFull = room:settlement_compute(2)
-
-
-
---local time = os.time()
---local day = tonumber(os.date("%Y%m%d", time))
---print(day)
-
-
 
 
 print("pChangeGameBeans", ttostring(pChangeGameBeans))
