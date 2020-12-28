@@ -1,0 +1,62 @@
+
+syntax = "proto2";
+package lmgovaffairs;
+
+//客户请求政务信息
+message C2S_GOVAFFAIRS_INFO {
+
+}
+
+//服务端下发政务信息
+message S2C_GOVAFFAIRS_INFO {
+    required int32 currentAffairsID      = 1;  //当前政务ID
+    required int32 currentAffairsCount   = 2;  //当前政绩数量
+    required int32 totalAffairsCount     = 3;  //总政绩数量
+    message Reward {
+        required int32 type          = 1; //奖励id
+        required int32 itermid       = 2; //奖励id
+        required int64 value         = 3; //数量
+    }
+    repeated Reward firstReward          = 4;  //操作1奖励
+    optional int32 time                  = 5;  //冷却时间
+}
+
+
+//客户请求处理政务信息
+message C2S_GOVAFFAIRS_UPDATE {
+    required int32 currentAffairsID   = 1;  //当前政务ID
+    required int32 eventType  = 2; //1:普通事件  2：特殊事件
+    required int32 optType  = 3; //1:选择1条目  2：选择2条目
+    optional int32  specialOptType = 4; //1:选择1条目  2：选择2条目
+}
+
+//服务端下发处理政务信息结果
+message S2C_GOVAFFAIRS_UPDATE {
+    message Reward {
+        required int32 itermid       = 1; //奖励id
+        required int64 value         = 2; //数量
+    }
+    repeated Reward currentReward            = 1;//当前奖励
+    repeated Reward firstReward              = 2;//操作1奖励
+    repeated Reward secondReward             = 3;//操作2奖励
+    optional int32 govAchieve                = 4;//改变的政绩值
+    required int32 currentAffairsRestCount   = 5;//剩余的事件数量
+    required  int32 nextAffairsID            = 6;//下一条事件ID
+    optional int32 time                      = 7;//冷却时间
+    optional  string errMsg                  = 8;//错误提示
+}
+
+//请求使用政务令
+message C2S_GOVAFFAIRS_USETOKEN {
+    required  int32 id       = 1;    //道具Id
+    required  int32 cnt      = 2;    //道具的数量
+}
+
+//下发政务令使用信息
+message S2C_GOVAFFAIRS_USETOKEN {
+    required  int32  changeCount    = 1;    //改变的数量
+    required  int32  restCount      = 2;    //当前剩余的次数
+    required bool  isSuccess        = 3;//是否成功
+    required string errMsg          = 4;//错误码
+}
+

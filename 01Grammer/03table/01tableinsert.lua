@@ -45,8 +45,6 @@ table.remove(t)
  	print(i,v)
  end
 
-
-
 --[[
 
 --------1-------
