@@ -15,6 +15,10 @@ function mh_client:C2S_SingleVisitInfo()
     self:send("S2C_SINGLEVISIT_INFO", data)
 end
 
+
+
+
+
 --下发一键寻访的信息
 function mh_client:C2S_AllleVisitInfo()
     local data = {}

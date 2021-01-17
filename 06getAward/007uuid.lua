@@ -1,4 +1,8 @@
+
+--math.randomseed(tostring(os.time()):reverse():sub(1, 6))
+
 local function uuid()
+    math.randomseed(tostring(os.time()):reverse():sub(1, 6))
     local seed={'e','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f'}
     --local seed = {'1','2','3','4','5','6','7','8','9'}
     local tb={}
