@@ -40,10 +40,9 @@ end
 
 --[[
 local t = {
-	{type = 0, 
+	{type = 0,
 	count = 0,
 	reward = {}},
-	
 	{type = 0,
 	count = 0,
 	reward = {}
@@ -67,11 +66,10 @@ t[2].reward = tmp
 ]]
 
 local t = {
-	type = 0, 
+	type = 0,
 	count = 0,
 	--reward1 = {}
 	--reward2 = {}
-	
 }
 
 local tmp = {}
@@ -95,8 +93,8 @@ print(ttostring(t))
 print(os.date("%Y%m%d"))
 
 
-local a = nil 
-local b = false 
+local a = nil
+local b = false
 
 if a == b then
 	print("yes")

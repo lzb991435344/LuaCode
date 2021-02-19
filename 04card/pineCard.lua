@@ -53,15 +53,17 @@ end
 local card = {}
 function deck()
     function card.sort(c)
-	table.sort(c, function(a,b)
-		local ra,sa = a&0xf,a&0xf0
-		local rb,sb = b&0xf,b&0xf0
-		if ra == rb then
-			return sa > sb
-		else
-			return ra < rb
+		table.sort(c,
+			function(a,b)
+				local ra,sa = a&0xf,a&0xf0
+				local rb,sb = b&0xf,b&0xf0
+				if ra == rb then
+					return sa > sb
+				else
+					return ra < rb
+				end
+			end)
 		end
-    end)
 end
 
 
@@ -120,6 +122,5 @@ end
 50      76
 51      77
 52      78
-
-]]--
+]]
 --print(ttstring(newdeck()))
