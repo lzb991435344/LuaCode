@@ -23,3 +23,15 @@ for k, v in pairs(conf) do
     	end	
     end	
 end
+--[[
+--333
+--12
+--12
+--12
+--uid     12
+--coin    888
+--pfid    14
+--
+--
+--]]
+
